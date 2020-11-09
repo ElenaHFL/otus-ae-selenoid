@@ -27,7 +27,6 @@ pipeline {
         stage('Run maven clean') {
             steps {
                 bat 'mvn clean'
-                bat 'mvn --version'
             }
         }
         stage('Run test') {
