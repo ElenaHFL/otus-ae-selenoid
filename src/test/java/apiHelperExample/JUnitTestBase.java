@@ -1,15 +1,16 @@
 package apiHelperExample;
 
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import io.restassured.RestAssured;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -31,9 +32,9 @@ public class JUnitTestBase {
     @SneakyThrows
     @BeforeEach
     public void initDriver()  {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-/*        String slenoidURL = "http://localhost:4444/wd/hub";
+/*        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();*/
+        String slenoidURL = "http://localhost:4444/wd/hub";
         DesiredCapabilities caps = new DesiredCapabilities();
         caps.setBrowserName("chrome");
         caps.setVersion("86.0");
@@ -42,7 +43,7 @@ public class JUnitTestBase {
         caps.setCapability("enableVideo", true);
         caps.setCapability("enableLog", true);
 
-        driver = new RemoteWebDriver(new URL(slenoidURL), caps);*/
+        driver = new RemoteWebDriver(new URL(slenoidURL), caps);
 
         driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
     }
