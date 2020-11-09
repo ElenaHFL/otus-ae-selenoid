@@ -57,17 +57,17 @@ pipeline {
                     def summary = junit testResults: '**/target/surefire-reports/*.xml'
                       
                     // Текст оповещения
-                    //def message = "${currentBuild.currentResult}: Job ${env.JOB_NAME}, build ${env.BUILD_NUMBER}, branch ${branch}\nDuration - ${duration}\nTest Summary - ${summary.totalCount}, Failures: ${summary.failCount}, Skipped: ${summary.skipCount}, Passed: ${summary.passCount}\nMore info at: ${env.BUILD_URL}"
+                    def message = "${currentBuild.currentResult}: Job ${env.JOB_NAME}, build ${env.BUILD_NUMBER}, branch ${branch}\nDuration - ${duration}\nTest Summary - ${summary.totalCount}, Failures: ${summary.failCount}, Skipped: ${summary.skipCount}, Passed: ${summary.passCount}\nMore info at: ${env.BUILD_URL}"
                     
                     // Отправка результатов на почту
-                    emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME}, build ${env.BUILD_NUMBER}, branch ${branch}\nDuration - ${currentBuild.durationString.minus(' секунд and counting')} seconds\nTest Summary - ${summary.totalCount}, Failures: ${summary.failCount}, Skipped: ${summary.skipCount}, Passed: ${summary.passCount}\nMore info at: ${env.BUILD_URL}",
+                    emailext body: "${message}",
                         recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
                         subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
                         to: 'elenaa@hflabs.ru'
                         
                     // Отправка результатов В slack
                     slackSend(
-                        message: "${currentBuild.currentResult}: Job ${env.JOB_NAME}, build ${env.BUILD_NUMBER}, branch ${branch}\nDuration - ${currentBuild.durationString.minus(' секунд and counting')} seconds\nTest Summary - ${summary.totalCount}, Failures: ${summary.failCount}, Skipped: ${summary.skipCount}, Passed: ${summary.passCount}\nMore info at: ${env.BUILD_URL}",
+                        message: "${message}",
                         channel: "qa-java-2020-06"
                     )
                   }
