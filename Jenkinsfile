@@ -52,12 +52,15 @@ pipeline {
 
                     // Узнаем ветку репозитория (т.к. это не multipipeline job, то вариант через env.BRANCH_NAME увы не работает)
                     def branch = bat(returnStdout: true, script: 'git rev-parse --abbrev-ref HEAD\n').trim().tokenize().last()
-                    
+                       
+                    // Делаем симпотичное время выполнения 
+                    def duration = "${currentBuild.durationString.minus(' секунд and counting')} seconds"
+                      
                     // Достаем информацию по тестам из junit репорта
                     def summary = junit testResults: '**/target/surefire-reports/*.xml'
-                    
+                      
                     // Текст оповещения
-                    def message = "${currentBuild.currentResult}: Job ${env.JOB_NAME}, build ${env.BUILD_NUMBER}, branch ${branch}\nDuration - ${currentBuild.durationString.minus(' секунд and counting')} seconds\nTest Summary - ${summary.totalCount}, Failures: ${summary.failCount}, Skipped: ${summary.skipCount}, Passed: ${summary.passCount}\nMore info at: ${env.BUILD_URL}"
+                    def message = "${currentBuild.currentResult}: Job ${env.JOB_NAME}, build ${env.BUILD_NUMBER}, branch ${branch}\nDuration - ${duration}\nTest Summary - ${summary.totalCount}, Failures: ${summary.failCount}, Skipped: ${summary.skipCount}, Passed: ${summary.passCount}\nMore info at: ${env.BUILD_URL}"
                     
                     // Отправка результатов на почту
                     emailext body: "${message}",
@@ -67,8 +70,8 @@ pipeline {
                         
                     // Отправка результатов В slack
                     slackSend(
-                        channel: "qa-java-2020-06",
-                        message: "${message}"
+                        message: "${message}",
+                        channel: "qa-java-2020-06"
                     )
                   }
                 }
