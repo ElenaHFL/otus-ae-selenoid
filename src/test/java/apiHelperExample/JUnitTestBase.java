@@ -32,7 +32,7 @@ public class JUnitTestBase {
     @BeforeEach
     public void initDriver()  {
         WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();git add .
+        driver = new ChromeDriver();
 
         driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
     }
